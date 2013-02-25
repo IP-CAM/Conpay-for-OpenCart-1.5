@@ -114,7 +114,7 @@ class ControllerModuleConpay extends Controller {
 				$special = false;
 			}
 			
-			$p = preg_replace('/[$,]/s', '', ($special? $special : $price));
+			$p = (float) preg_replace('/[$,]/s', '', ($special? $special : $price));
 			
 			if ($p < $settings['min_price']) continue;
 			
