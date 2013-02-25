@@ -13,11 +13,11 @@
 2. В меню "Расширения -> Модули" установите модуль CONPAY.RU.
 3. Внесите настройки модуля и добавьте модуль в шаблоны товара и каталога ("Добавить модуль"). Убедитесь, что модуль активирован. Сохраните настройки.
 4. Добавить HTML-контейнер кнопки в шаблоны:
-* в шаблоне товара `/catalog/view/theme/[default]/template/product/product.tpl` добавить контейнер кнопки:
+*   в шаблоне товара `/catalog/view/theme/[default]/template/product/product.tpl` добавить контейнер кнопки:
 ```php
 <div id="[ID контейнера кнопки в настройках модуля]-<?php echo $product_id; ?>"></div>
 ```
-* в шаблоне товара `/catalog/view/theme/[default]/template/product/category.tpl` добавить контейнер кнопки в цикле перечисления товаров:
+*   в шаблоне товара `/catalog/view/theme/[default]/template/product/category.tpl` добавить контейнер кнопки в цикле перечисления товаров:
 ```php
 <div id="[ID контейнера кнопки в настройках модуля]-<?php echo $product_id; ?>"></div>
 ```
