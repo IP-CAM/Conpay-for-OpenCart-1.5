@@ -11,9 +11,9 @@
       (
         '<?php echo $callback_url; ?>',
         {
-          'className': '<?php echo $settings['button_class_name']; ?>',
-          'tagName': '<?php echo $settings['button_tag_name']; ?>',
-          'text': '<?php echo html_entity_decode($settings['button_text']); ?>',
+          'className':  '<?php echo $settings['button_class_name']; ?>',
+          'tagName':    '<?php echo $settings['button_tag_name']; ?>',
+          'text':       '<?php echo html_entity_decode($settings['button_text']); ?>',
         }, {}
         <?php // echo json_encode($products); ?>
       );

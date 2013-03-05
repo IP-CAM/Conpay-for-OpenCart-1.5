@@ -1,17 +1,26 @@
 <?php
 
-class ControllerModuleConpay extends Controller {
-	protected function index($setting) {
-		
+class ControllerModuleConpay extends Controller
+{
+	protected function index($setting)
+  {
+    // Загружаем языковой файл модуля
+
 		$this->language->load('module/conpay');
+
+    // Загружаем необходимые модели CMS
 		
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/product');
 		$this->load->model('setting/setting');
+
+    // Определяем тип страницы
 		
 		$route = $this->request->get['route'];
 		
 		$category = '';
+
+    // В зависимости от типа страницы загружаем данные о товарах
 		
 		switch($route)
 		{
@@ -19,7 +28,8 @@ class ControllerModuleConpay extends Controller {
 				
 				$product_id = 0;
 				
-				if (isset($this->request->get['product_id'])) {
+				if (isset($this->request->get['product_id']))
+        {
 					$product_id = (int) $this->request->get['product_id'];
 				}
 				
@@ -29,7 +39,8 @@ class ControllerModuleConpay extends Controller {
 			
 			case 'product/category':
 				
-				if (isset($this->request->get['path'])) {
+				if (isset($this->request->get['path']))
+        {
 					$parts = explode('_', (string) $this->request->get['path']);
 					$category_id = (int) array_pop($parts);
 				} else {
@@ -44,33 +55,48 @@ class ControllerModuleConpay extends Controller {
 				
 				$this->data['credit_purchase'] = $this->language->get('conpay_credit_purchase');
 				
-				if (isset($this->request->get['filter'])) {
+				if (isset($this->request->get['filter']))
+        {
 					$filter = $this->request->get['filter'];
-				} else {
+				}
+        else
+        {
 					$filter = '';
 				}
 				
-				if (isset($this->request->get['sort'])) {
+				if (isset($this->request->get['sort']))
+        {
 					$sort = $this->request->get['sort'];
-				} else {
+				}
+        else
+        {
 					$sort = 'p.sort_order';
 				}
 				
-				if (isset($this->request->get['order'])) {
+				if (isset($this->request->get['order']))
+        {
 					$order = $this->request->get['order'];
-				} else {
+				}
+        else
+        {
 					$order = 'ASC';
 				}
 				
-				if (isset($this->request->get['page'])) {
+				if (isset($this->request->get['page']))
+        {
 					$page = $this->request->get['page'];
-				} else { 
+				}
+        else
+        {
 					$page = 1;
 				}
 				
-				if (isset($this->request->get['limit'])) {
+				if (isset($this->request->get['limit']))
+        {
 					$limit = $this->request->get['limit'];
-				} else {
+				}
+        else
+        {
 					$limit = $this->config->get('config_catalog_limit');
 				}
 				
@@ -86,37 +112,55 @@ class ControllerModuleConpay extends Controller {
 				$results = $this->model_catalog_product->getProducts($data);
 				
 				break;
+
+      default:
+
+        return false;
+        break;
 		}
+
+    // Загружаем настройки модуля
 		
 		$settings = $this->model_setting_setting->getSetting('conpay');
 		
 		$this->data['settings'] = $settings;
 		$this->data['products'] = array();
 		$price = 0;
+
+    // Строим массив характеристик товаров
 		
-		foreach ($results as $result) {
-			
-			if ($result['image']) {
+		foreach ($results as $result)
+    {
+			if ($result['image'])
+      {
 				$image = $result['image'];
-			} else {
+			}
+      else
+      {
 				$image = false;
 			}
 			
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price'))
+      {
 				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')));
-			} else {
+			}
+      else
+      {
 				$price = false;
 			}
 			
-			if ((float) $result['special']) {
+			if ((float) $result['special'])
+      {
 				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')));
-			} else {
+			}
+      else
+      {
 				$special = false;
 			}
 			
 			$p = (float) preg_replace('/[$,]/s', '', ($special? $special : $price));
-			
-			if ($p < $settings['min_price']) continue;
+
+      if ($p < $settings['min_price'] || $p > 200000) continue;
 			
 			$this->data['products'][] = array(
 				'id'  				=> $result['product_id'],
@@ -129,15 +173,21 @@ class ControllerModuleConpay extends Controller {
 			
 			$price += $p;
 		}
+
+    // Определяем название прокси-скрипта CONPAY.RU
 		
-		//if ($price < $settings['min_price']) return false;
 		$this->data['callback_url'] = $this->url->link('module/conpay/callback');
+
+    // Подкрепляем JS-скрипт и вызываем шаблон модуля
 		
 		$this->document->addScript('http://www.conpay.ru/public/api/btn.1.6.min.js');
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/conpay.tpl')) {
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/conpay.tpl'))
+    {
 			$this->template = $this->config->get('config_template') . '/template/module/conpay.tpl';
-		} else {
+		}
+    else
+    {
 			$this->template = 'default/template/module/conpay.tpl';
 		}
 		
@@ -146,27 +196,41 @@ class ControllerModuleConpay extends Controller {
 	
 	public function callback()
 	{
+    // Загружаем настройки модуля
+
 		$this->load->model('setting/setting');
 		$settings = $this->model_setting_setting->getSetting('conpay');
 		
 		if (!$settings) $settings = array('merchant_id' => 0, 'api_key' => '');
 		
 		// Подключаем скрипт с классом ConpayProxyModel, выполняющим бизнес-логику
+
 		require_once 'ConpayProxyModel.php';
+
 		try
 		{
 			// Создаем объект класса ConpayProxyModel
+
 			$proxy = new ConpayProxyModel;
+
 			// Устанавливаем свой идентификатор продавца
+
 			$proxy->setMerchantId($settings['merchant_id']);
+
 			// Устанавливаем свой API-ключ
+
 			$proxy->setApiKey($settings['api_key']);
+
 			// Устанавливаем кодировку, используемую на сайте (по-умолчанию 'UTF-8')
+
 			$proxy->setCharset('UTF-8');
+
 			// Выполняем запрос, выводя его результат
+
 			echo $proxy->sendRequest();
 		}
-		catch (Exception $e) {
+		catch (Exception $e)
+    {
 			echo json_encode(array('error'=>$e->getMessage()));
 		}
 	}
@@ -176,24 +240,31 @@ class ControllerModuleConpay extends Controller {
 		if($_SERVER['REQUEST_METHOD'] != 'POST') die('Access denied');
 		
 		$post =& $this->request->post;
+
+    // Загружаем настройки модуля и присваиваем их переменным
 		
 		$this->load->model('setting/setting');
-		$settings = $this->model_setting_setting->getSetting('conpay');
-		$ps_settings = $this->model_setting_setting->getSetting('conpay_payment_system');
+
+		$settings     = $this->model_setting_setting->getSetting('conpay');
+		$ps_settings  = $this->model_setting_setting->getSetting('conpay_payment_system');
 		
-		$response_pass = $settings['response_pass'];
-		$merchant_id = $settings['merchant_id'];
-		$total = 0;
+		$response_pass  = $settings['response_pass'];
+		$merchant_id    = $settings['merchant_id'];
+		$total          = 0;
+
+    // Формируем суммарную стоимость заказа
 		
 		if (isset($post['goods']))
 		{
 			foreach ((array) $post['goods'] as $item)
 			{
-				$total += (float) $item['price'];
+        $total += (float) ($item['price'] * $item['quantity']);
 			}
 		}
-		
-		if (!isset($post['delivery'])) $this->request->post['delivery'] = 0;
+
+    if (!isset($post['delivery'])) $this->request->post['delivery'] = 0;
+
+    // Вычисляем контрольную сумму
 		
 		$parts = array
 		(
@@ -211,6 +282,8 @@ class ControllerModuleConpay extends Controller {
 		}
 		
 		$checksum = md5(implode('!', $parts));
+
+    // Проверяем правильность входных значений или выходим
 		
 		if ($post['checksum'] != $checksum
 				|| $_SERVER['HTTP_REFERER'] != 'https://www.conpay.ru'
@@ -218,19 +291,23 @@ class ControllerModuleConpay extends Controller {
 		{
 			die('Access denied.');
 		}
-		
-		$customer = (array) $post['customer'];
-		$custom = (array) $post['custom'];
+
+    $customer = (array) $post['customer'];
+    $custom   = (array) $post['custom'];
+
+    // Если заказ уже существует, выходим
 		
 		if ($custom['order_id']) die('Order already exists.');
 		
 		$this->load->model('checkout/order');
+
+    // Определяем ID валюты
 		
 		$currency_code = 'RUB';
 		$res = $this->db->query("SELECT currency_id FROM " . DB_PREFIX . "currency WHERE code = '" . $currency_code . "'");
 		$currency_id = $res->row['currency_id'];
 		
-		// Add order
+		// Добавляем заказ
 		
 		$data = array
 		(
@@ -239,18 +316,45 @@ class ControllerModuleConpay extends Controller {
 			"store_name" 			=> $this->config->get('config_name'),
 		);
 		
-		if ($data['store_id']) {
+		if ($data['store_id'])
+    {
 			$data['store_url'] = $this->config->get('config_url');		
-		} else {
+		}
+    else
+    {
 			$data['store_url'] = HTTP_SERVER;	
 		}
+
+    // Определяем телефон и адрес заказчика
+
+    $customer_phone = $customer['ContactPhone'] . (isset($customer['HomePhone'])? ', ' . $customer['HomePhone'] : '');
+
+    if (isset($customer['ResidenceCity']))
+    {
+      $customer_address = $customer['ResidenceCity'] . ', ' . $customer['ResidenceStreet'] . ', ' . $customer['ResidenceHouse'];
+
+      if (isset($customer['ResidenceCorpus']))
+      {
+        $customer_address .= ' - ' . $customer['ResidenceCorpus'];
+      }
+      if (isset($customer['ResidenceApartment']))
+      {
+        $customer_address .= ', ' . $customer['ResidenceApartment'];
+      }
+    }
+    else
+    {
+      $customer_address = '';
+    }
+
+    // Набираем массив значений для записи заказа
 		
 		$data["customer_id"] 				= 0;
 		$data["customer_group_id"] 	= 1;
 		$data["firstname"] 					= $customer['FirstName'];
 		$data["lastname"] 					= $customer['LastName'];
 		$data["email"] 							= $customer['Email'];
-		$data["telephone"] 					= ''; //$customer['Phone']
+		$data["telephone"] 					= $customer_phone;
 		$data["fax"] 								= '';
 		
 		$data['payment_firstname'] 			= $customer['FirstName'];
@@ -258,7 +362,7 @@ class ControllerModuleConpay extends Controller {
 		$data['payment_company'] 				= '';	
 		$data['payment_company_id'] 		= '';	
 		$data['payment_tax_id'] 				= '';	
-		$data['payment_address_1'] 			= '';
+		$data['payment_address_1'] 			= $customer_address;
 		$data['payment_address_2'] 			= '';
 		$data['payment_city'] 					= '';
 		$data['payment_postcode'] 			= '';
@@ -292,6 +396,8 @@ class ControllerModuleConpay extends Controller {
 		$data['shipping_code'] 						= '';
 		
 		$data['products'] = array();
+
+    // Набираем данные о заказанных товарах
 		
 		foreach((array) $post['goods'] as $i => $item)
 		{
@@ -305,7 +411,7 @@ class ControllerModuleConpay extends Controller {
 				"quantity" 		=> IntVal($item['quantity']),
 				"subtract" 		=> '1', //???
 				"price" 			=> $item['price'],
-				"total" 			=> $item['price'],
+				"total" 			=> $item['price'] * IntVal($item['quantity']),
 				"tax" 				=> 0,
 				"reward" 			=> 0,
 			);
@@ -333,12 +439,14 @@ class ControllerModuleConpay extends Controller {
 		$data["language_id"] 		= $this->config->get('config_language_id');
 		$data["currency_id"] 		= $currency_id;
 		$data["currency_code"] 	= $currency_code;
-		$data["currency_value"] = $total;
+		$data["currency_value"] = 1;
 		
 		$data["ip"] 							= '';
 		$data["forwarded_ip"] 		= '';
 		$data["user_agent"] 			= '';
 		$data["accept_language"] 	= '';
+
+    // Создаем и подтверждаем заказ
 		
 		$order_id = $this->model_checkout_order->addOrder($data);
 		
@@ -350,7 +458,7 @@ class ControllerModuleConpay extends Controller {
 	private function _getCategoryNames($product_id) {
 		
 		$sql = "
-		SELECT name
+		SELECT DISTINCT name
 		FROM " . DB_PREFIX . "category_description cd
 		LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON p2c.category_id = cd.category_id
 		WHERE p2c.product_id = $product_id
