@@ -477,5 +477,3 @@ class ControllerModuleConpay extends Controller
 		return html_entity_decode(implode('; ', $categories));
 	}
 }
-
-?>
