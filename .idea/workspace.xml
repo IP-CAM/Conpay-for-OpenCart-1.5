@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="77c3cfca-94ea-4338-b342-9323d53db801" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="77c3cfca-94ea-4338-b342-9323d53db801" name="Default" comment="" />
     <ignored path="Opencart.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,7 +23,7 @@
       <file leaf-file-name="conpay.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/catalog/controller/module/conpay.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="473" column="16" selection-start="12125" selection-end="12125" vertical-scroll-proportion="0.7786982">
+            <state line="292" column="76" selection-start="7042" selection-end="7042" vertical-scroll-proportion="0.73491126">
               <folding />
             </state>
           </provider>
@@ -434,7 +432,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/catalog/controller/module/conpay.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="473" column="16" selection-start="12125" selection-end="12125" vertical-scroll-proportion="0.7786982">
+        <state line="292" column="76" selection-start="7042" selection-end="7042" vertical-scroll-proportion="0.73491126">
           <folding />
         </state>
       </provider>
