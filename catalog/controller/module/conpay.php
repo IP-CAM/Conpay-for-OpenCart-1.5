@@ -314,13 +314,13 @@ class ControllerModuleConpay extends Controller
 		// Определяем телефон и адрес заказчика
 		$customer_phone = $customer['ContactPhone'].(!empty($customer['HomePhone']) ? ', '.$customer['HomePhone'] : '');
 
-		if (isset($customer['ResidenceCity']))
+		if (isset($customer['ResidenceStreet']))
 		{
-			$customer_address = $customer['ResidenceCity'].
-				(!empty($customer['ResidenceStreet']) ? ', '.$customer['ResidenceStreet'] : '').
-				(!empty($customer['ResidenceHouse']) ? ', '.$customer['ResidenceHouse'] : '').
-				(!empty($customer['ResidenceCorpus']) ? ' - '.$customer['ResidenceCorpus'] : '').
-				(!empty($customer['ResidenceApartment']) ? ', '.$customer['ResidenceApartment'] : '');
+			$customer_address =
+			$customer['ResidenceStreet'].
+			(!empty($customer['ResidenceHouse']) ? ', '.$customer['ResidenceHouse'] : '').
+			(!empty($customer['ResidenceCorpus']) ? ' - '.$customer['ResidenceCorpus'] : '').
+			(!empty($customer['ResidenceApartment']) ? ', '.$customer['ResidenceApartment'] : '');
 		}
 		else
 		{
@@ -343,7 +343,7 @@ class ControllerModuleConpay extends Controller
 		$data['payment_tax_id'] = '';
 		$data['payment_address_1'] = $customer_address;
 		$data['payment_address_2'] = '';
-		$data['payment_city'] = '';
+		$data['payment_city'] = $customer['ResidenceCity'];
 		$data['payment_postcode'] = '';
 		$data['payment_zone'] = '';
 		$data['payment_zone_id'] = 0;
