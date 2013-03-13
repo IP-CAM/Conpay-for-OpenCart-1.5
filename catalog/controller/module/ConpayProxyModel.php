@@ -198,12 +198,10 @@ class ConpayProxyModel
 				$totalsum += $p['price'] * (isset($p['quantity']) && $p['quantity'] > 1 ? (int)$p['quantity'] : 1);
 			}
 		}
-		
-		if (!isset($data['delivery'])) $data['delivery'] = 0;
 
 		$parts = array(
 			$this->apiKey,
-			is_numeric($data['delivery']) ? $totalsum + $data['delivery'] : $totalsum,
+			isset($data['delivery']) && is_numeric($data['delivery']) ? $totalsum + $data['delivery'] : $totalsum,
 			$this->merchantId
 		);
 
