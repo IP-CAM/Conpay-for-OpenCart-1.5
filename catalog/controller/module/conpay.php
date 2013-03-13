@@ -327,16 +327,18 @@ class ControllerModuleConpay extends Controller
 			$customer_address = '';
 		}
 
+		$first_name = $customer['UserName'].(!empty($customer['PatronymicName']) ? ' '.$customer['PatronymicName'] : '');
+
 		// Набираем массив значений для записи заказа
 		$data["customer_id"] = 0;
 		$data["customer_group_id"] = 1;
-		$data["firstname"] = $customer['UserName'].(!empty($customer['PatronymicName']) ? ' '.$customer['PatronymicName'] : '');
+		$data["firstname"] = $first_name;
 		$data["lastname"] = $customer['LastName'];
 		$data["email"] = $customer['Email'];
 		$data["telephone"] = $customer_phone;
 		$data["fax"] = '';
 
-		$data['payment_firstname'] = $customer['UserName'];
+		$data['payment_firstname'] = $first_name;
 		$data['payment_lastname'] = $customer['LastName'];
 		$data['payment_company'] = '';
 		$data['payment_company_id'] = '';
@@ -359,12 +361,12 @@ class ControllerModuleConpay extends Controller
 		$data['payment_method'] = 'Conpay';
 		$data['payment_code'] = 'conpay_payment_system';
 
-		$data['shipping_firstname'] = '';
-		$data['shipping_lastname'] = '';
+		$data['shipping_firstname'] = $first_name;
+		$data['shipping_lastname'] = $customer['LastName'];
 		$data['shipping_company'] = '';
-		$data['shipping_address_1'] = '';
+		$data['shipping_address_1'] = $customer_address;
 		$data['shipping_address_2'] = '';
-		$data['shipping_city'] = '';
+		$data['shipping_city'] = $customer['ResidenceCity'];
 		$data['shipping_postcode'] = '';
 		$data['shipping_zone'] = '';
 		$data['shipping_zone_id'] = '';
