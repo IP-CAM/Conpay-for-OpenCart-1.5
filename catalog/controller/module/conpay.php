@@ -170,11 +170,8 @@ class ControllerModuleConpay extends Controller
 			$price += $p;
 		}
 
-		// Определяем название прокси-скрипта CONPAY.RU
-		$this->data['callback_url'] = $this->url->link('module/conpay/callback');
-
 		// Подкрепляем JS-скрипт и вызываем шаблон модуля
-		$this->document->addScript('//www.conpay.ru/public/api/btn.1.6.min.js');
+		$this->document->addScript('//www.conpay.ru/public/api/btn.1.7.min.js');
 
 		if (file_exists(DIR_TEMPLATE.$this->config->get('config_template').'/template/module/conpay.tpl'))
 		{

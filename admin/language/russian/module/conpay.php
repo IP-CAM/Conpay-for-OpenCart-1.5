@@ -18,7 +18,6 @@ $_['entry_sort_order'] = 'Порядок сортировки:';
 
 // Fields
 $_['merchant_id'] = 'ID продавца:';
-$_['api_key'] = 'API-ключ:';
 $_['response_pass'] = 'Ключ ответа:';
 $_['button_container_id'] = 'ID контейнера кнопки:';
 $_['button_class_name'] = 'Имя класса кнопки:';

@@ -22,7 +22,6 @@ class ControllerModuleConpay extends Controller
 		{
 			$this->data['settings'] = array(
 				'merchant_id' => 0,
-				'api_key' => '',
 				'response_pass' => '',
 				'button_container_id' => 'conpay-btn-container',
 				'button_class_name' => 'conpay-btn',
@@ -47,7 +46,6 @@ class ControllerModuleConpay extends Controller
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
 
 		$this->data['merchant_id'] = $this->language->get('merchant_id');
-		$this->data['api_key'] = $this->language->get('api_key');
 		$this->data['response_pass'] = $this->language->get('response_pass');
 		$this->data['button_container_id'] = $this->language->get('button_container_id');
 		$this->data['button_class_name'] = $this->language->get('button_class_name');

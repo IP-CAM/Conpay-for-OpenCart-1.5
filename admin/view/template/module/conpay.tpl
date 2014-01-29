@@ -21,10 +21,6 @@
             <td><input type="text" name="merchant_id" value="<?php echo $settings['merchant_id']; ?>" /></td>
           </tr>
           <tr>
-            <td><?php echo $api_key; ?></td>
-            <td><input type="text" name="api_key" value="<?php echo $settings['api_key']; ?>" size="50" /></td>
-          </tr>
-          <tr>
             <td><?php echo $response_pass; ?></td>
             <td><input type="text" name="response_pass" value="<?php echo $settings['response_pass']; ?>" size="50" /></td>
           </tr>
